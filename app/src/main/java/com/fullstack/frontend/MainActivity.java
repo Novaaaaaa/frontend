@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
+import com.fullstack.frontend.Retrofit.APIClient;
+import com.fullstack.frontend.Retrofit.APIInterface;
+import com.fullstack.frontend.Retrofit.Post;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private void getPosts() {
         // this method takes arguments as id
         // fetch particular post's comment
-        Call<List<Post>> call = apiInterface.getPosts(1);
+        Call<List<Post>> call = apiInterface.getPosts(2);
 
         call.enqueue(new Callback<List<Post>>() {
             @Override

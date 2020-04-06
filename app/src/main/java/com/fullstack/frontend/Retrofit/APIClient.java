@@ -1,4 +1,4 @@
-package com.fullstack.frontend;
+package com.fullstack.frontend.Retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

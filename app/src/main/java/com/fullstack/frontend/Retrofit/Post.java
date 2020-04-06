@@ -1,4 +1,4 @@
-package com.fullstack.frontend;
+package com.fullstack.frontend.Retrofit;
 
 import com.google.gson.annotations.SerializedName;
 
