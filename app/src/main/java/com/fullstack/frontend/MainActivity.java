@@ -1,6 +1,7 @@
 package com.fullstack.frontend;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -16,9 +17,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    // retrofit
+    private APIInterface apiInterface;
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // call the POST method
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        getPosts();
     }
 
     @Override
@@ -60,4 +74,38 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private void getPosts() {
+        // this method takes arguments as id
+        // fetch particular post's comment
+        Call<List<Post>> call = apiInterface.getPosts(1);
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if (!response.isSuccessful()) {
+                   // textView.setText("code " + response.code());
+                    return;
+                }
+
+                List<Post> posts = response.body();
+
+                for (Post post : posts) {
+                    String content = "";
+                    content += "User ID: " + post.getUserID() + "\n";
+                    content += "ID: " + post.getId() + "\n";
+                    content += "Title: " + post.getTitle() + "\n";
+                    content += "Body: " + post.getText() + "\n\n";
+
+                    Log.d(TAG, content);
+                   // textView.append(content);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+               // textView.setText(t.getMessage());
+            }
+        });
+    }
+
 }
